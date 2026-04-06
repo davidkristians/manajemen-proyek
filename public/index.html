@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petranslate</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>Petranslate</h1>
+    <p class="subtitle">Smart Translation + Value Converter</p>
+
+    <textarea id="inputText" placeholder="Type your text here..."></textarea>
+
+    <div class="controls">
+      <select id="source">
+        <option value="auto">Auto Detect</option>
+        <option value="en">English</option>
+        <option value="id">Indonesian</option>
+      </select>
+
+      <select id="target">
+        <option value="id">Indonesian</option>
+        <option value="en">English</option>
+      </select>
+
+      <button id="translateBtn">Translate</button>
+    </div>
+
+    <div class="result-box">
+      <h3>Translation Result</h3>
+      <p id="outputText">Result will appear here...</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Currency Converter</h2>
+
+    <div class="controls">
+      <input type="number" id="amount" placeholder="Amount">
+      <select id="from">
+        <option value="USD">USD</option>
+        <option value="IDR">IDR</option>
+      </select>
+
+      <select id="to">
+        <option value="IDR">IDR</option>
+        <option value="USD">USD</option>
+      </select>
+
+      <button id="convertBtn">Convert</button>
+    </div>
+
+    <div class="result-box">
+      <p id="currencyResult">Conversion result...</p>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
