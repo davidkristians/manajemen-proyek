@@ -1,65 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Petranslate</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petranslate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        appYellow: '#F5D34B',
+                        appDark: '#1E1E1E',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-appYellow min-h-screen text-slate-800 font-sans flex flex-col">
 
-<div class="container">
-  <div class="card">
-    <h1>Petranslate</h1>
-    <p class="subtitle">Smart Translation + Value Converter</p>
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-appYellow p-2 rounded-lg text-appDark">
+                <i class="fas fa-language text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold text-appDark">Petranslate</h1>
+        </div>
+        
+        <div class="flex bg-slate-100 p-1 rounded-3xl">
+            <button id="tab-translate" class="px-6 py-2 rounded-3xl font-semibold text-sm transition-all bg-white shadow-sm text-appDark">
+                Translate
+            </button>
+            <button id="tab-currency" class="px-6 py-2 rounded-3xl font-semibold text-sm transition-all text-slate-500 hover:text-appDark">
+                Currency
+            </button>
+        </div>
+    </nav>
 
-    <textarea id="inputText" placeholder="Type your text here..."></textarea>
+    <main class="flex-1 flex flex-col w-full max-w-6xl mx-auto my-6 px-4">
 
-    <div class="controls">
-      <select id="source">
-        <option value="auto">Auto Detect</option>
-        <option value="en">English</option>
-        <option value="id">Indonesian</option>
-      </select>
+        <div id="section-translate" class="flex-1 flex flex-col animate-fade-in">
+            <div class="flex-1 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row relative">
+                
+                <button class="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 bg-white border border-slate-200 text-slate-400 rounded-full w-10 h-10 items-center justify-center hover:bg-slate-50 hover:text-appDark shadow-sm z-10 transition">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
 
-      <select id="target">
-        <option value="id">Indonesian</option>
-        <option value="en">English</option>
-      </select>
+                <div class="flex-1 p-6 lg:p-8 lg:border-r border-slate-200 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100 shrink-0">
+                        <span class="text-sm font-bold text-slate-400 uppercase">From</span>
+                        <div class="relative inline-block">
+                            <select id="source" class="appearance-none bg-slate-100 text-appDark font-semibold py-2 pl-4 pr-10 rounded-3xl outline-none cursor-pointer w-full">
+                                <option value="auto">Auto Detect</option>
+                                <option value="en">English</option>
+                                <option value="id">Indonesian</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-appDark">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex-1 w-full flex flex-col">
+                        <textarea id="inputText" class="flex-1 w-full min-h-[10rem] bg-transparent text-appDark text-xl lg:text-2xl focus:outline-none resize-none placeholder-slate-300 pb-12" placeholder="Type something to translate..."></textarea>
+    
+                        <button id="micBtn" class="absolute bottom-2 right-2 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-appDark w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-10">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
 
-      <button id="translateBtn">Translate</button>
-    </div>
+                <div class="flex-1 p-6 lg:p-8 bg-slate-50/50 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100 shrink-0">
+                        <span class="text-sm font-bold text-slate-400 uppercase">To</span>
+                        <div class="relative inline-block">
+                            <select id="target" class="appearance-none bg-white border border-slate-200 text-appDark font-semibold py-2 pl-4 pr-10 rounded-3xl outline-none cursor-pointer shadow-sm w-full">
+                                <option value="id">Indonesian</option>
+                                <option value="en">English</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-appDark">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="result-box">
-      <h3>Translation Result</h3>
-      <p id="outputText">Result will appear here...</p>
-    </div>
-  </div>
+                    <div class="flex-1 w-full overflow-y-auto">
+                        <div class="relative flex-1 w-full h-full flex flex-col">
+                            <div class="flex-1 overflow-y-auto pb-12">
+                                <p id="outputText" class="text-appDark text-xl lg:text-2xl">Translation</p>
+                            </div>
+    
+                            <button id="speakerBtn" class="absolute bottom-2 right-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-appDark w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm z-10">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-  <div class="card">
-    <h2>Currency Converter</h2>
+            </div>
+        </div>
 
-    <div class="controls">
-      <input type="number" id="amount" placeholder="Amount">
-      <select id="from">
-        <option value="USD">USD</option>
-        <option value="IDR">IDR</option>
-      </select>
+        <div id="section-currency" class="hidden animate-fade-in w-full">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row relative">
+                
+                <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-100 text-slate-400 rounded-full w-12 h-12 items-center justify-center z-10">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
 
-      <select id="to">
-        <option value="IDR">IDR</option>
-        <option value="USD">USD</option>
-      </select>
+                <div class="flex-1 p-8 lg:p-12 lg:border-r border-slate-200">
+                    <label class="text-sm font-bold text-slate-400 uppercase mb-4 block">Amount to Convert</label>
+                    <div class="flex items-center gap-4 mb-8">
+                        <select id="from" class="bg-slate-100 text-appDark font-bold text-xl py-3 px-4 rounded-xl outline-none cursor-pointer w-1/3 text-center">
+                            <option value="USD">USD</option>
+                            <option value="IDR">IDR</option>
+                        </select>
+                        <input type="number" id="amount" class="w-2/3 bg-transparent text-appDark text-5xl font-bold focus:outline-none placeholder-slate-200 border-b-2 border-slate-100 focus:border-appYellow pb-2 transition" placeholder="0">
+                    </div>
+                </div>
 
-      <button id="convertBtn">Convert</button>
-    </div>
+                <div class="flex-1 p-8 lg:p-12 bg-slate-50/50 flex flex-col justify-center">
+                    <label class="text-sm font-bold text-slate-400 uppercase mb-4 block">Converted Value</label>
+                    <div class="flex items-center gap-4 mb-8">
+                        <select id="to" class="bg-white border border-slate-200 text-appDark font-bold text-xl py-3 px-4 rounded-xl outline-none cursor-pointer shadow-sm w-1/3 text-center">
+                            <option value="IDR">IDR</option>
+                            <option value="USD">USD</option>
+                        </select>
+                        <p id="currencyResult" class="w-2/3 text-emerald-500 text-5xl font-bold truncate">0.00</p>
+                    </div>
+                </div>
 
-    <div class="result-box">
-      <p id="currencyResult">Conversion result...</p>
-    </div>
-  </div>
-</div>
+            </div>
 
-<script src="script.js"></script>
+            <div class="mt-8 mb-4 flex justify-center shrink-0">
+                <button id="convertBtn" class="bg-appDark text-appYellow hover:bg-black font-semibold text-lg py-4 px-12 rounded-full transition-all shadow-lg flex items-center gap-3">
+                    <i class="fas fa-coins text-xl"></i> Convert Currency
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+
+    <script src="script.js"></script>
 </body>
 </html>

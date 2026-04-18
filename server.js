@@ -9,6 +9,36 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+// /* =========================
+//    TRANSLATE API
+// ========================= */
+// app.post("/api/translate", async (req, res) => {
+//     try {
+//         const { text, source, target } = req.body;
+
+//         const response = await fetch("http://127.0.0.1:5000/translate", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify({
+//                 q: text,
+//                 source: source,
+//                 target: target,
+//                 format: "text"
+//             })
+//         });
+
+//         const data = await response.json();
+
+//         res.json(data);
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: "Translation failed" });
+//     }
+// });
+
 /* =========================
    TRANSLATE API
 ========================= */
@@ -16,25 +46,26 @@ app.post("/api/translate", async (req, res) => {
     try {
         const { text, source, target } = req.body;
 
-        const response = await fetch("http://127.0.0.1:5000/translate", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                q: text,
-                source: source,
-                target: target,
-                format: "text"
-            })
-        });
+        // Menggunakan endpoint publik gratis dari Google Translate
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(text)}`;
 
+        const response = await fetch(url);
         const data = await response.json();
 
-        res.json(data);
+        // Google Translate API mengembalikan data dalam bentuk array bersarang
+        // Teks hasil terjemahan utamanya selalu berada di index [0][0][0]
+        let translatedText = "";
+        if (data && data[0]) {
+            data[0].forEach(item => {
+                if (item[0]) translatedText += item[0];
+            });
+        }
+
+        // Kirim balik ke frontend (script.js)
+        res.json({ translatedText: translatedText });
 
     } catch (error) {
-        console.error(error);
+        console.error("Translate error:", error);
         res.status(500).json({ error: "Translation failed" });
     }
 });
