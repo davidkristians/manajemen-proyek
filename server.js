@@ -98,7 +98,10 @@ app.get("/currency/:amount/:from/:to", async (req, res) => {
 
         const result = amount * rate;
 
-        const formatted = new Intl.NumberFormat("id-ID").format(Math.round(result));
+        const formatted = new Intl.NumberFormat("id-ID", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 5
+        }).format(result);
 
         res.json({ result: formatted });
 
@@ -107,6 +110,46 @@ app.get("/currency/:amount/:from/:to", async (req, res) => {
         res.status(500).json({ error: "Currency conversion failed" });
     }
 });
+
+// app.get("/currency/:amount/:from/:to", async (req, res) => {
+//     try {
+//         let { amount, from, to } = req.params;
+
+//         amount = parseFloat(amount);
+//         from = from.toUpperCase();
+//         to = to.toUpperCase();
+
+//         if (isNaN(amount)) {
+//             return res.status(400).json({ error: "Invalid amount" });
+//         }
+
+//         // Ambil kurs berdasarkan mata uang base (from)
+//         const response = await axios.get(
+//             `https://use.api.co.id/currency/${from}`,
+//             {
+//                 headers: {
+//                     "x-api-co-id": process.env.APICOID_KEY
+//                 },
+//                 timeout: 5000
+//             }
+//         );
+
+//         const rate = response.data?.rate?.[to];
+
+//         if (!rate) {
+//             return res.status(400).json({ error: "Invalid currency code" });
+//         }
+
+//         const result = amount * rate;
+//         const formatted = new Intl.NumberFormat("id-ID").format(Math.round(result));
+
+//         res.json({ result: formatted });
+
+//     } catch (error) {
+//         console.error("Currency error:", error.message);
+//         res.status(500).json({ error: "Currency conversion failed" });
+//     }
+// });
 
 /* =========================
    SIMPLE UNIT CONVERTER

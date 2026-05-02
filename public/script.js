@@ -55,6 +55,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // === LOGIKA API CURRENCY ===
     document.getElementById("convertBtn")?.addEventListener("click", convertCurrency);
 
+    // // === FORMAT TITIK RIBUAN PADA INPUT CURRENCY ===
+    // const amountInput = document.getElementById("amount");
+    // amountInput.addEventListener("input", function () {
+    //     // Hapus semua titik dulu
+    //     let rawValue = this.value.replace(/\./g, "").replace(/\D/g, "");
+
+    //     if (rawValue === "") {
+    //         this.value = "";
+    //         return;
+    //     }
+
+    //     // Format ulang dengan titik ribuan
+    //     this.value = new Intl.NumberFormat("id-ID").format(rawValue);
+    // });
+
     // === LOGIKA TOMBOL SUARA ===
     document.getElementById("micBtn").addEventListener("click", startDictation);
     document.getElementById("speakerBtn").addEventListener("click", speakText);
@@ -131,7 +146,12 @@ function speakText() {
     const utterance = new SpeechSynthesisUtterance(text);
     
     // Sesuaikan aksen (English / Indonesian)
-    utterance.lang = targetLang === 'id' ? 'id-ID' : 'en-US';
+    const langMap = {
+        'en': 'en-US',
+        'id': 'id-ID',
+        'zh': 'zh-CN'
+    };
+    utterance.lang = langMap[targetLang] || 'en-US';
     
     // Mainkan suara
     window.speechSynthesis.speak(utterance);
@@ -158,7 +178,12 @@ function startDictation() {
     const inputText = document.getElementById("inputText");
     
     // Sesuaikan pendengaran dengan bahasa dropdown
-    recognition.lang = sourceLang === 'id' ? 'id-ID' : 'en-US';
+    const langMap = {
+        'en': 'en-US',
+        'id': 'id-ID',
+        'zh': 'zh-CN'
+    };
+    recognition.lang = langMap[sourceLang] || 'en-US';
     recognition.interimResults = false;
 
     // Saat mulai mendengarkan
